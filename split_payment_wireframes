@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Split Payment — Medium-Fidelity Wireframe Prototype</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F3EE;
+    --surface: #FFFFFF;
+    --border: #D6D2C8;
+    --border-strong: #A8A39A;
+    --text-primary: #1A1917;
+    --text-secondary: #6B6760;
+    --text-hint: #A8A39A;
+    --accent: #1B4FD8;
+    --accent-light: #EBF0FD;
+    --accent-text: #0F2E8A;
+    --success: #1A6B3A;
+    --success-bg: #E8F5EE;
+    --warning: #7A4A00;
+    --warning-bg: #FEF3DC;
+    --annotation: #8B3A3A;
+    --annotation-bg: #FDF0F0;
+    --annotation-border: #E8C5C5;
+    --screen-shadow: 0 2px 12px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.06);
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+
+  .page-content {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .page-header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .screen-section {
+    margin-bottom: 80px;
+  }
+
+  .screen-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .screen-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .screen-label h2 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .screen-label span {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-family: var(--mono);
+    background: var(--border);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .screen-wrapper {
+    display: grid;
+    gap: 28px;
+    align-items: start;
+  }
+  .screen-wrapper.pos-layout {
+    grid-template-columns: 680px 280px;
+  }
+  .screen-wrapper.mobile-layout {
+    grid-template-columns: 300px 1fr;
+    max-width: 900px;
+  }
+
+  .device-frame {
+    box-shadow: var(--screen-shadow);
+    border-radius: 12px;
+    background: var(--surface);
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+  }
+
+  .device-frame.pos {
+    min-height: 480px;
+    max-width: 680px;
+  }
+
+  .device-frame.mobile {
+    width: 300px;
+    border-radius: 24px;
+    border-width: 6px;
+    border-color: #2C2C2A;
+    margin: 0 auto;
+  }
+
+  .device-titlebar {
+    background: #2A2A2A;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 11px;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .device-titlebar .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .device-titlebar .dot.r { background: #FF5F57; }
+  .device-titlebar .dot.y { background: #FEBC2E; }
+  .device-titlebar .dot.g { background: #28C840; }
+  .device-titlebar .title { margin-left: 8px; opacity: 0.7; }
+
+  .mobile-notch {
+    background: #2C2C2A;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+  }
+  .mobile-notch .notch-bar {
+    width: 80px;
+    height: 4px;
+    background: #555;
+    border-radius: 2px;
+  }
+  .mobile-status {
+    background: #1A1917;
+    color: #fff;
+    padding: 4px 16px;
+    font-size: 10px;
+    font-family: var(--mono);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .screen-body {
+    padding: 20px;
+  }
+  .screen-body.mobile-body {
+    padding: 16px;
+    min-height: 540px;
+  }
+
+  .pos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .pos-header .store-name {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .pos-header .total-amount {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+  }
+  .pos-header .total-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .pos-badge {
+    background: var(--accent-light);
+    color: var(--accent-text);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid #C5D5F8;
+  }
+
+  .split-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+  .split-table th {
+    text-align: left;
+    padding: 6px 8px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .split-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .split-table tr:last-child td { border-bottom: none; }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .status-pill.ready { background: var(--success-bg); color: var(--success); }
+  .status-pill.pending { background: var(--warning-bg); color: var(--warning); }
+  .status-pill.paid { background: var(--success-bg); color: var(--success); }
+  .status-pill::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .status-pill.ready::before { background: var(--success); }
+  .status-pill.pending::before { background: #E8A020; }
+  .status-pill.paid::before { background: var(--success); }
+
+  .amount-display {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .add-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px dashed #C5D5F8;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    justify-content: center;
+  }
+
+  .allocation-bar {
+    margin-bottom: 16px;
+  }
+  .allocation-bar .bar-track {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .allocation-bar .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .allocation-bar .bar-fill.full { background: var(--success); }
+  .allocation-bar .bar-fill.partial { background: var(--accent); }
+  .allocation-bar .bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .allocation-bar .bar-labels strong { color: var(--text-primary); }
+
+  .qr-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #FAFAF8;
+  }
+  .qr-visual {
+    width: 80px; height: 80px;
+    background: repeating-conic-gradient(#333 0% 25%, #fff 0% 50%) 0 0 / 8px 8px;
+    border: 2px solid #333;
+  }
+  .qr-label {
+    font-size: 12px;
+    text-align: center;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  .qr-label strong { color: var(--accent); }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    margin-bottom: 8px;
+    letter-spacing: 0.2px;
+  }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.secondary { background: var(--surface); color: var(--text-primary); border: 1.5px solid var(--border-strong); }
+  .btn.success { background: var(--success); color: #fff; }
+
+  .progress-bar-block {
+    margin-bottom: 20px;
+  }
+  .progress-track {
+    height: 20px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+  }
+  .progress-segment {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .progress-segment.seg1 { background: var(--success); }
+  .progress-segment.seg2 { background: var(--border); }
+
+  .payment-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+  .payment-row.approved { border-color: #A8D5B8; background: var(--success-bg); }
+  .payment-row.pending { border-color: #F0D080; background: var(--warning-bg); }
+
+  .still-owed {
+    background: var(--text-primary);
+    color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    margin-top: 16px;
+  }
+  .still-owed .amount { font-size: 28px; font-weight: 600; font-family: var(--mono); letter-spacing: -1px; }
+  .still-owed .label { font-size: 12px; opacity: 0.7; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .mobile-section-header {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    margin-top: 16px;
+  }
+  .mobile-section-header:first-child { margin-top: 0; }
+
+  .mobile-total-header {
+    text-align: center;
+    padding: 16px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .mobile-total-header .amount { font-size: 28px; font-weight: 600; font-family: var(--mono); }
+  .mobile-total-header .label { font-size: 12px; color: var(--text-secondary); }
+
+  .mobile-pay-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    margin-bottom: 8px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .mobile-pay-option.selected { border-color: var(--accent); background: var(--accent-light); }
+  .radio-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid var(--border-strong);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .radio-dot.active { border-color: var(--accent); }
+  .radio-dot.active::after {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .group-status {
+    background: var(--accent-light);
+    border: 1px solid #C5D5F8;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 12px;
+  }
+  .group-status .gs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .group-status .gs-row:last-child { margin-bottom: 0; }
+  .group-status .gs-label { color: var(--accent-text); }
+  .group-status .gs-val { font-weight: 500; font-family: var(--mono); }
+
+  .waiting-banner {
+    background: var(--warning-bg);
+    border: 1px solid #F0D080;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--warning);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .waiting-banner .pulse {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #E8A020;
+    flex-shrink: 0;
+  }
+
+  .confirm-check {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--success-bg);
+    border: 2px solid var(--success);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 24px;
+  }
+  .confirm-amount {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    font-family: var(--mono);
+    margin-bottom: 4px;
+  }
+  .confirm-label {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+  .confirm-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  .confirm-detail-row:last-of-type { border-bottom: none; }
+  .confirm-detail-row .key { color: var(--text-secondary); }
+  .confirm-detail-row .val { font-weight: 500; }
+
+  .remaining-owed-mobile {
+    background: var(--text-primary);
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .remaining-owed-mobile .label { font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.5px; }
+  .remaining-owed-mobile .amount { font-size: 20px; font-weight: 600; font-family: var(--mono); }
+
+  .annotation-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .annotation {
+    background: var(--annotation-bg);
+    border: 1px solid var(--annotation-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .annotation .ann-tag {
+    font-size: 10px;
+    font-family: var(--mono);
+    font-weight: 600;
+    color: var(--annotation);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 5px;
+  }
+  .annotation .ann-text {
+    font-size: 13px;
+    line-height: 1.55;
+    color: #4A2020;
+  }
+  .annotation .ann-req {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 10px;
+    font-family: var(--mono);
+    background: #E8C5C5;
+    color: var(--annotation);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 40px 0;
+  }
+
+  .page-footer {
+    text-align: center;
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-hint);
+    font-family: var(--mono);
+  }
+
+  @media (max-width: 1000px) {
+    .screen-wrapper.pos-layout,
+    .screen-wrapper.mobile-layout {
+      grid-template-columns: 1fr;
+    }
+    .screen-wrapper.pos-layout .device-frame.pos {
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page-content">
+
+<div class="page-header">
+  <h1>Split Payment — Medium-Fidelity Wireframe Prototype</h1>
+  <p>CS 6750: Human-Computer Interaction &nbsp;·&nbsp; Richard Harris &nbsp;·&nbsp; Combined POS Terminal + Mobile Interface (Alt A + Alt C)</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 1 — POS Split Planner (Pre-auth)
+══════════════════════════════════════════════════ -->
+<div class="screen-section">
+  <div class="screen-label">
+    <div class="screen-number">1</div>
+    <h2>POS Terminal — Split Planner View</h2>
+    <span>Pre-authorization</span>
+  </div>
+
+  <div class="screen-wrapper pos-layout">
+    <div class="device-frame pos">
+      <div class="device-titlebar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="title">RetailPOS v4.2 — Register 3</span>
+      </div>
+      <div class="screen-body">
+        <div class="pos-header">
+          <div>
+            <div class="store-name">Transaction #4821</div>
+            <div class="total-amount">$190.00</div>
+            <div class="total-label">Total Due</div>
+          </div>
+          <div class="pos-badge">Split Payment Mode</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 100px;gap:16px;margin-bottom:16px;">
+          <div>
+            <table class="split-table">
+              <thead>
+                <tr>
+                  <th>Name / Label</th>
+                  <th>Amount</th>
+                  <th>Share</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:500;">Alex</td>
+                  <td><span class="amount-display">$60.00</span></td>
+                  <td style="color:var(--text-secondary);font-size:12px;">31.6%</td>
+                  <td style="color:var(--text-secondary);font-size:12px;">Debit ****1234</td>
+                  <td><span class="status-pill ready">Ready</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">Jordan</td>
+                  <td><span class="amount-display">$80.00</span></td>
+                  <td style="color:var(--text-secondary);font-size:12px;">42.1%</td>
+                  <td style="color:var(--text-secondary);font-size:12px;">QR pending</td>
+                  <td><span class="status-pill pending">Waiting</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">Sam</td>
+                  <td><span class="amount-display">$50.00</span></td>
+                  <td style="color:var(--text-secondary);font-size:12px;">26.3%</td>
+                  <td style="color:var(--text-secondary);font-size:12px;">QR pending</td>
+                  <td><span class="status-pill pending">Waiting</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="add-row">+ Add payment method</div>
+            <div class="allocation-bar">
+              <div class="bar-track">
+                <div class="bar-fill full" style="width:100%;"></div>
+              </div>
+              <div class="bar-labels">
+                <span>Allocated: <strong>$190.00 (100%)</strong></span>
+                <span>Remaining: <strong style="color:var(--success);">$0.00</strong></span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="qr-block">
+              <div class="qr-visual"></div>
+              <div class="qr-label"><strong>Scan with your phone</strong><br>to pay your share</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn primary">Confirm Plan &amp; Begin Authorization</button>
+        <button class="btn secondary">Cancel Split</button>
+      </div>
+    </div>
+
+    <div class="annotation-panel">
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 1</div>
+        <div class="ann-text">The "Split Payment Mode" badge and dedicated planning screen provide a clear <strong>affordance</strong> for split payments — closing the Gulf of Execution identified in needfinding, where no visible entry point existed on standard POS screens.</div>
+        <span class="ann-req">R1 — Pre-transaction planning</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 2</div>
+        <div class="ann-text">The allocation bar shows remaining balance in real time, eliminating manual arithmetic. This offloads the arithmetic task from the user's working memory entirely, satisfying Norman's principle of reducing cognitive load.</div>
+        <span class="ann-req">R6 — Low cognitive load</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 3</div>
+        <div class="ann-text">The QR code includes an explicit instruction label — <em>"Scan with your phone to pay your share"</em> — directly addressing the QR ambiguity theme surfaced in the first evaluation (participants unsure whether it was a menu, ad, or payment link).</div>
+        <span class="ann-req">R3 — Multi-party coordination</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 4</div>
+        <div class="ann-text">Row-based tabular layout allows the cashier to visually scan all payment participants and their statuses simultaneously — reducing the Gulf of Evaluation by making the full state of the transaction legible at a glance.</div>
+        <span class="ann-req">R2 — Real-time feedback</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 2 — POS In-Progress View
+══════════════════════════════════════════════════ -->
+<div class="screen-section">
+  <div class="screen-label">
+    <div class="screen-number">2</div>
+    <h2>POS Terminal — In-Progress View</h2>
+    <span>After first partial payment</span>
+  </div>
+
+  <div class="screen-wrapper pos-layout">
+    <div class="device-frame pos">
+      <div class="device-titlebar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="title">RetailPOS v4.2 — Register 3</span>
+      </div>
+      <div class="screen-body">
+        <div class="pos-header">
+          <div>
+            <div class="store-name">Transaction #4821</div>
+            <div class="total-amount">$190.00</div>
+            <div class="total-label">Total Due</div>
+          </div>
+          <div class="pos-badge">1 of 3 Paid</div>
+        </div>
+
+        <div class="progress-bar-block">
+          <div class="progress-track">
+            <div style="display:flex;height:100%;">
+              <div class="progress-segment seg1" style="width:31.5%;">$60 · 31.6%</div>
+              <div class="progress-segment seg2" style="width:68.5%;color:var(--text-secondary);font-size:10px;font-weight:500;padding-left:10px;">$130 · 68.4% remaining</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);">
+            <span>$60.00 authorized (31.6%)</span>
+            <span>$130.00 still owed (68.4%)</span>
+          </div>
+        </div>
+
+        <table class="split-table" style="margin-bottom:16px;">
+          <thead>
+            <tr><th>Participant</th><th>Amount</th><th>Share</th><th>Method</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:500;">Alex</td>
+              <td><span class="amount-display">$60.00</span></td>
+              <td style="font-size:12px;color:var(--text-secondary);">31.6%</td>
+              <td style="font-size:12px;color:var(--text-secondary);">Debit ****1234</td>
+              <td><span class="status-pill paid">Approved</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">Jordan</td>
+              <td><span class="amount-display">$80.00</span></td>
+              <td style="font-size:12px;color:var(--text-secondary);">42.1%</td>
+              <td style="font-size:12px;color:var(--text-secondary);">QR — phone</td>
+              <td><span class="status-pill pending">Waiting</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;">Sam</td>
+              <td><span class="amount-display">$50.00</span></td>
+              <td style="font-size:12px;color:var(--text-secondary);">26.3%</td>
+              <td style="font-size:12px;color:var(--text-secondary);">QR — phone</td>
+              <td><span class="status-pill pending">Waiting</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="still-owed">
+          <div class="label">Present next payment for</div>
+          <div class="amount">$130.00</div>
+          <div style="font-size:12px;opacity:0.6;margin-top:4px;">68.4% of total remaining</div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;">
+          <button class="btn secondary" style="font-size:12px;padding:8px;margin-bottom:0;">Adjust an amount</button>
+          <button class="btn secondary" style="font-size:12px;padding:8px;margin-bottom:0;">Undo last payment</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation-panel">
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 5</div>
+        <div class="ann-text">The segmented progress bar gives immediate visual feedback after each payment — users see exactly what portion of the total has been satisfied. This is the core fix for the Gulf of Evaluation gap: the system now communicates its internal state clearly.</div>
+        <span class="ann-req">R2 — Real-time balance feedback</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 6</div>
+        <div class="ann-text">The large high-contrast "Present next payment for: $130.00" block dominates the lower half of the screen, giving the cashier and customer an unambiguous action prompt. This addresses Norman's principle: the system's current state should dictate the next action clearly.</div>
+        <span class="ann-req">R2 + R6</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 7</div>
+        <div class="ann-text">"Adjust an amount" and "Undo last payment" buttons provide error recovery without voiding the entire transaction — a direct response to the evaluation finding that forced restarts were the most frustrating breakdown participants experienced.</div>
+        <span class="ann-req">R4 — Error recovery</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 3 — Customer Mobile: Pay Your Share
+══════════════════════════════════════════════════ -->
+<div class="screen-section">
+  <div class="screen-label">
+    <div class="screen-number">3</div>
+    <h2>Customer Mobile — Pay Your Share</h2>
+    <span>After scanning QR</span>
+  </div>
+
+  <div class="screen-wrapper mobile-layout">
+    <div class="device-frame mobile">
+      <div class="mobile-notch"><div class="notch-bar"></div></div>
+      <div class="mobile-status">
+        <span>9:41</span>
+        <span>SplitPay</span>
+        <span>●●●</span>
+      </div>
+      <div class="screen-body mobile-body">
+        <div class="mobile-total-header">
+          <div class="label">Your share of order #4821</div>
+          <div class="amount">$80.00</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:3px;">42.1% of $190.00 total</div>
+        </div>
+
+        <div class="waiting-banner">
+          <div class="pulse"></div>
+          <span>Waiting for 1 more payment after yours</span>
+        </div>
+
+        <div class="remaining-owed-mobile">
+          <div>
+            <div class="label">Group balance remaining</div>
+            <div class="amount">$130.00</div>
+          </div>
+          <div style="font-size:11px;opacity:0.6;text-align:right;">of $190.00<br>total</div>
+        </div>
+
+        <div class="mobile-section-header">Pay with</div>
+        <div class="mobile-pay-option selected">
+          <div class="radio-dot active"></div>
+          <span style="font-size:14px;">Apple Pay</span>
+        </div>
+        <div class="mobile-pay-option">
+          <div class="radio-dot"></div>
+          <span style="font-size:14px;">Google Pay</span>
+        </div>
+        <div class="mobile-pay-option">
+          <div class="radio-dot"></div>
+          <span style="font-size:14px;">Enter card manually</span>
+        </div>
+
+        <div class="group-status">
+          <div class="gs-row">
+            <span class="gs-label">Alex paid</span>
+            <span class="gs-val" style="color:var(--success);">$60.00 · 31.6% ✓</span>
+          </div>
+          <div class="gs-row">
+            <span class="gs-label">Jordan (you)</span>
+            <span class="gs-val">$80.00 · 42.1% pending</span>
+          </div>
+          <div class="gs-row">
+            <span class="gs-label">Sam</span>
+            <span class="gs-val" style="color:var(--text-hint);">$50.00 · 26.3% waiting</span>
+          </div>
+        </div>
+
+        <button class="btn primary" style="margin-top:16px;">Submit $80.00 Payment</button>
+      </div>
+    </div>
+
+    <div class="annotation-panel" style="padding-top:8px;">
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 8</div>
+        <div class="ann-text">The persistent "Waiting for 1 more payment after yours" banner closes the feedback loop participants said was missing in the first evaluation — they wanted to know when the whole transaction would be complete, not just their own portion.</div>
+        <span class="ann-req">R2 — Real-time feedback</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 9</div>
+        <div class="ann-text">The group status panel shows all three participants and their payment states simultaneously. This satisfies the social transparency need: no one is left wondering whether their friend has paid or is still fumbling. This directly reduces social friction identified in the root user need.</div>
+        <span class="ann-req">R3 — Multi-party coordination</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 10</div>
+        <div class="ann-text">The "Group balance remaining" block shows both the user's share ($80) and the live group total ($130) — giving context without requiring arithmetic. This is an application of Norman's principle that the system should do the computation, not the user.</div>
+        <span class="ann-req">R6 — Low cognitive load</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 11</div>
+        <div class="ann-text">Apple Pay is pre-selected as the default method, minimizing the number of actions needed to complete the task. This reflects the Principle of Least Effort: the most likely action (contactless mobile payment) should require the fewest steps.</div>
+        <span class="ann-req">R6 — Low cognitive load</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 4 — Customer Mobile: Confirmation
+══════════════════════════════════════════════════ -->
+<div class="screen-section">
+  <div class="screen-label">
+    <div class="screen-number">4</div>
+    <h2>Customer Mobile — Post-Payment Confirmation</h2>
+    <span>After submission</span>
+  </div>
+
+  <div class="screen-wrapper mobile-layout">
+    <div class="device-frame mobile">
+      <div class="mobile-notch"><div class="notch-bar"></div></div>
+      <div class="mobile-status">
+        <span>9:42</span>
+        <span>SplitPay</span>
+        <span>●●●</span>
+      </div>
+      <div class="screen-body mobile-body">
+        <div style="padding:20px 0 12px;">
+          <div class="confirm-check">✓</div>
+          <div class="confirm-amount">$80.00</div>
+          <div class="confirm-label">Payment confirmed</div>
+        </div>
+
+        <div style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;">
+          <div class="confirm-detail-row">
+            <span class="key">Transaction</span>
+            <span class="val">#4821</span>
+          </div>
+          <div class="confirm-detail-row">
+            <span class="key">Your name</span>
+            <span class="val">Jordan</span>
+          </div>
+          <div class="confirm-detail-row">
+            <span class="key">Amount charged</span>
+            <span class="val" style="font-family:var(--mono);">$80.00 (42.1%)</span>
+          </div>
+          <div class="confirm-detail-row">
+            <span class="key">Method</span>
+            <span class="val">Apple Pay</span>
+          </div>
+          <div class="confirm-detail-row">
+            <span class="key">Auth code</span>
+            <span class="val" style="font-family:var(--mono);font-size:12px;">TXN-9284-JH</span>
+          </div>
+        </div>
+
+        <div class="mobile-section-header">Group Status</div>
+        <div style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px;">
+          <div class="confirm-detail-row">
+            <span class="key">Alex</span>
+            <span class="val" style="color:var(--success);font-family:var(--mono);">$60.00 · 31.6% ✓</span>
+          </div>
+          <div class="confirm-detail-row">
+            <span class="key">Jordan (you)</span>
+            <span class="val" style="color:var(--success);font-family:var(--mono);">$80.00 · 42.1% ✓</span>
+          </div>
+          <div class="confirm-detail-row" style="border-bottom:none;">
+            <span class="key">Sam</span>
+            <span class="val" style="color:var(--warning);font-family:var(--mono);">$50.00 · 26.3% pending</span>
+          </div>
+        </div>
+
+        <div class="waiting-banner">
+          <div class="pulse"></div>
+          <span>Waiting for Sam's $50.00 payment to complete transaction</span>
+        </div>
+
+        <button class="btn success">Done</button>
+        <button class="btn secondary" style="font-size:12px;padding:8px;margin-top:4px;">View receipt</button>
+      </div>
+    </div>
+
+    <div class="annotation-panel" style="padding-top:8px;">
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 12</div>
+        <div class="ann-text">The confirmation screen shows a receipt-level detail block with auth code and payment method — satisfying R5 (Transparent receipts) and closing the Gulf of Evaluation loop. The user has unambiguous evidence their payment was registered correctly.</div>
+        <span class="ann-req">R5 — Transparent receipts</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 13</div>
+        <div class="ann-text">The group status panel persists on the confirmation screen — a direct fix for the "Waiting Game" theme from evaluation, where participants felt abandoned after submitting their own payment. They can now see exactly whose payment remains outstanding.</div>
+        <span class="ann-req">R3 — Multi-party coordination</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 14</div>
+        <div class="ann-text">The persistent "Waiting for Sam's $50.00" banner names the specific participant and amount — not a generic spinner. This satisfies Norman's feedback principle: feedback should be specific and informative, not merely indicate that "something is happening."</div>
+        <span class="ann-req">R2 — Real-time feedback</span>
+      </div>
+      <div class="annotation">
+        <div class="ann-tag">Design Decision 15</div>
+        <div class="ann-text">The large green checkmark and "Done" CTA give a clear, satisfying signal that the user's task is complete — even while the group transaction is still processing. This separates personal task completion from group transaction completion, reducing anxiety and social friction.</div>
+        <span class="ann-req">R2 + R6</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-footer">
+  CS 6750 Individual Project · Richard Harris · rharris@gatech.edu · Medium-Fidelity Prototype · Alt A + Alt C Combined
+</div>
+
+</div><!-- end page-content -->
+</body>
+</html>
